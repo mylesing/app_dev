@@ -1,0 +1,8 @@
+
+public class Game {
+	public int getGoal {
+		return (int) Math.random() * 999;
+	}
+	
+	public int get
+}

@@ -1,0 +1,47 @@
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+/**
+ *Testing TOPSIS class
+ */
+class TOPSISTest {
+	double[][] m_decision;
+	double[] weights;
+	Topsis topsis;
+	
+	@Test
+	protected void testTOPSISIrregularColumns() {
+		m_decision[1] = new double[7];
+		weights = new double[7];
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> new TOPSIS(m_decision, weights));
+	}
+	
+	@Test
+	protected void testTOPSISMismatchWeightsAndMatrix() {
+		m_decision = new double[4][7];
+		weights = new double[7];
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> new TOPSIS(m_decision, weights));
+	}
+	
+	@Test
+	protected void testTOPSISNull() {
+		m_decision = new double[4][7];
+		weights = new double[7];
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> new TOPSIS(null, weights));
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> new TOPSIS(m_decision, null));
+	}
+	
+	@Test
+	public void testTOPSIS() {
+		m_decision = new double[4][6];
+		weights = new double[6];
+		
+		
+	}
+	
+
+}

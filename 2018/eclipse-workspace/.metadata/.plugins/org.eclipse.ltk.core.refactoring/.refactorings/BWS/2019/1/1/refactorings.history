@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 6 elements to &apos;BWS_web/src/com.BWS.BWSweb&apos;&#x0D;&#x0A;- Original project: &apos;BWS&apos;&#x0D;&#x0A;- Destination element: &apos;BWS_web/src/com.BWS.BWSweb&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     SimpleAttribute.java&#x0D;&#x0A;     SpectralRank.java&#x0D;&#x0A;     TOPSIS.java&#x0D;&#x0A;     SimpleRank.java&#x0D;&#x0A;     RankTest.java&#x0D;&#x0A;     SimpleMatrixRank.java" description="Copy compilation units" destination="=BWS_web/src&lt;com.BWS.BWSweb" element1="/src&lt;{SimpleAttribute.java" element2="/src&lt;{SpectralRank.java" element3="/src&lt;{TOPSIS.java" element4="/src&lt;{SimpleRank.java" element5="/src&lt;{RankTest.java" element6="/src&lt;{SimpleMatrixRank.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1546631257601" units="6" version="1.0"/>
+</session>

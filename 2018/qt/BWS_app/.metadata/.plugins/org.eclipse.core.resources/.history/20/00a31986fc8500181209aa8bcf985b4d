@@ -1,0 +1,129 @@
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+/**
+ * The BWS Ranking process. It takes four Attributes taking
+ * into account their priorities to be asked and asks the
+ * question. It then ranks and assigns new priorities to
+ * the Attributes.
+ */
+public class Rank {
+	/**
+	 * HashMap containing the complete list of Attributes to be ranked.
+	 * Corresponding Map of priorities. Priority is determined by the total 
+	 * number of comparisons an Attribute has with other Attributes. 
+	 * Smaller numbers have greater priority.
+	 */
+	private Map<String, Attribute> attrAll = new HashMap<>();
+	private Map<Integer, String> priorities = new TreeMap<>();
+	
+	//Creating the Attributes.
+	//Update this process with sets of Attributes that can be accessed
+	//and a UI that can create a set of Attributes.
+	Attribute attrA = new Attribute("A", "QualityA");
+	Attribute attrB = new Attribute("B", "QualityB");
+	Attribute attrC = new Attribute("C", "QualityC");
+	Attribute attrD = new Attribute("D", "QualityD");
+	Attribute attrE = new Attribute("E", "QualityE");
+	Attribute attrF = new Attribute("F", "QualityF");
+	Attribute attrG = new Attribute("G", "QualityG");
+	
+	public void setup() {
+		//Adding the Attributes to the Attributes map.
+		attrAll.put("A", attrA);
+		attrAll.put("B", attrB);
+		attrAll.put("C", attrC);
+		attrAll.put("D", attrD);
+		attrAll.put("E", attrE);
+		attrAll.put("F", attrF);
+		attrAll.put("G", attrG);
+		//Adding priorities to priorities HashMap
+		priorities.put(0, "A");
+		priorities.put(0, "B");
+		priorities.put(0, "C");
+		priorities.put(0, "D");
+		priorities.put(0, "E");
+		priorities.put(0, "F");
+		priorities.put(0, "G");	
+	}
+	
+	/**
+	 * Choose four attributes based on priority.
+	 * Best and worst will be picked here until UI is made.
+	 * Update lists and tallies.
+	 * Repeat until complete ranking is achieved (if they all have
+	 * comparisons to each other).
+	 */
+	public int run() {
+		//If they all have comparisons to each other, ranking is complete.
+		Iterator<Attribute> iterator = attrAll.values().iterator();
+		while(iterator.hasNext()) {
+			Attribute attr = iterator.next();
+			//Return 1 for completing ranking.
+			if (attr.getTotal() >= attrAll.size() - 1 && !iterator.hasNext()) return 1;
+			if (attr.getTotal() >= attrAll.size() - 1 && iterator.hasNext()) continue;
+			break;
+		}
+					
+		//Choose the four highest priority Attributes to ask a question
+		String[] options = new String[4];
+		options = chooseFour(options);
+		
+		//Ask question and receive input
+		String most = options[1];
+		String least = options[3];
+		
+		//Update Lists
+		updateLists(most, least, options[0], options[2]);
+		
+		//Return 0 for having run successfully
+		return 0;
+	}
+	
+	/**
+	 * Current Priority
+	 * Choose one with lowest number of comparisons.
+	 * If the only one that can be added is maxed out in comparisons, add blank.
+	 * If there is only one option then send error.
+	 * 
+	 * Possible Priority method
+	 * Does not have a comparison total of attrAll.size() - 1.
+	 * Go in order of Attributes with longest lists and pick one that isn't in 
+	 * current and target's lists until you have four picked out.
+	 * Add blanks if needed.
+	 * If there is only one option then send error.
+	 */
+	private String[] chooseFour(String[] options) {
+		int optionsCount = 0;
+		Set<Map.Entry<Integer, String>> attrByPrior = priorities.entrySet();
+		Iterator<Map.Entry<Integer, String>> iter = attrByPrior.iterator();
+		while (iter.hasNext() && (optionsCount < 4)) {
+			Map.Entry<Integer, String> current = iter.next();
+			if(current.getKey() >= attrAll.size() - 1) {
+				continue;
+			}
+			options[optionsCount] = current.getValue();
+			optionsCount++;
+		}
+		if (options[1] == "" && options[2] == "" && options[3] == "")
+			throw new java.lang.Error("Only one option for question.");
+		return options;
+	}
+	
+	/**
+	 * Update Method
+	 * Get a list of Attributes lower than middle1 and middle2, and least.
+	 * Add most and most's lists to middle1 and middle2, and the ones lower 
+	 * than middle1 and middle2 but not in least's lowest. The contains function 
+	 * in Attribute's add function will take care of repeats.
+	 * Combine middle1's and middle2's list and add them and middle1 and middle2 
+	 * to least and the rest of ones in the list of Attributes ranked lower than 
+	 * least not already done by middle1 and middle2's lower ranked lists.
+	 */
+	private void updateLists(String most, String least, String middle1, String middle2) {
+		
+	}
+	
+}

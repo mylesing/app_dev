@@ -1,0 +1,21 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
+class RankTest {
+
+	@Test
+	void testRun() {
+		List<String> rank = new List<String>();
+		
+		Rank bws = new Rank();
+		bws.setup();
+		bws.run();
+		bws.run();
+		bws.run();
+		bws.run();
+	}
+
+}

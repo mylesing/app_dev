@@ -1,0 +1,85 @@
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+/**
+ *Testing TOPSIS class
+ */
+class TOPSISTest {
+	double[][] m_decision;
+	double[] weights;
+	TOPSIS topsis;
+	
+	@Test
+	protected void testTOPSISIrregularColumns() {
+		m_decision[1] = new double[7];
+		weights = new double[7];
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> new TOPSIS(m_decision, weights));
+	}
+	
+	@Test
+	protected void testTOPSISMismatchWeightsAndMatrix() {
+		m_decision = new double[4][7];
+		weights = new double[7];
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> new TOPSIS(m_decision, weights));
+	}
+	
+	@Test
+	protected void testTOPSISNull() {
+		m_decision = new double[4][7];
+		weights = new double[7];
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> new TOPSIS(null, weights));
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> new TOPSIS(m_decision, null));
+	}
+	
+	@Test
+	public void testTOPSIS() {
+		m_decision = new double[4][6];
+		weights = new double[6];
+		
+		m_decision[0] = new double[] {2.0, 1500, 20000, 5.5, 5, 9};
+		m_decision[1] = new double[] {2.5, 2700, 18000, 6.5, 3, 5};
+		m_decision[2] = new double[] {1.8, 2000, 21000, 4.5, 7, 7};
+		m_decision[3] = new double[] {2.2, 1800, 20000, 5, 5, 5};
+		
+		weights = new double[] {0.2, 0.1, 0.1, 0.1, 0.2, 0.3};
+		
+		topsis = new TOPSIS(m_decision, weights);
+	}
+	
+	@Test
+	public void testGetWeights() {
+		assertEquals(new double[] {0.2, 0.1, 0.1, 0.1, 0.2, 0.3}, topsis.getWeights());
+	}
+	
+	@Test
+	public void testGetDecisionMatrix() {
+		double[][] d = {new double[] {2.0, 1500, 20000, 5.5, 5, 9}, 
+			new double[] {2.5, 2700, 18000, 6.5, 3, 5}, 
+			new double[] {1.8, 2000, 21000, 4.5, 7, 7},
+			new double[] {2.2, 1800, 20000, 5, 5, 5}};
+		assertTrue(d.equals(topsis.getDecisionMatrix()));
+		}
+	
+	@Test
+	public void testGetRankings() {
+		Map<Double, Integer> r = new TreeMap<Double, Integer>(Collections.reverseOrder());;
+		assertTrue(topsis.getRankings());
+	}
+	
+	
+	
+	
+	
+
+}

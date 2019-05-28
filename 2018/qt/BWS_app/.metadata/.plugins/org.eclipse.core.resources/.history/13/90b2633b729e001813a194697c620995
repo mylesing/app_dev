@@ -1,0 +1,20 @@
+
+public class Game {
+	public int getGoal() {
+		return (int) Math.random() * 999;
+	}
+	
+	public int[] getNumbers(int bigs) {
+		int numbers[] = new int[7];
+		for(int i = 0; i < bigs; i++) {
+			double x = Math.random();
+			if (x > .75) {
+				numbers[i] = 75;
+			} else if ( x > .5) {
+				numbers[i] = 50;
+			} else {
+				numbers[i] = 25;
+			}
+		}
+	}
+}

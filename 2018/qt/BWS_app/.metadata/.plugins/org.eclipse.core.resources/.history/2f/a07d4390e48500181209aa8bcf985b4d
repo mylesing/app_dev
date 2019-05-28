@@ -1,0 +1,12 @@
+/**
+ * The BWS Ranking process. It takes four Attributes taking
+ * into account their priorities to be asked and asks the
+ * question. It then ranks and assigns new priorities to
+ * the attributes.
+ */
+public class Rank {
+	
+	public void run() {
+		
+	}
+}

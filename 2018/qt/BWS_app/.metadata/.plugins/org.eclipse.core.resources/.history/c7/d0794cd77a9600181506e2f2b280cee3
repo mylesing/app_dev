@@ -1,0 +1,238 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+/** This class implements the spectral ranking method.
+ * It uses a Markov chain with of the items and edges for
+ * their comparisons. The rankings are calculated by randomly
+ * walking through the chain until the rankings do not change.
+ *
+ */
+//Make a function to create epsilon edges
+public class SpectralRank {
+	//This list contains all the Attributes that are in the Markov chain.
+	List<SimpleAttribute> attrList;
+	//This map records all the epsilon edges in the Markov chain. 
+	//The set of string are Attributes having an epsilon edge going to key.
+	Map<String, Set<String>> epsilons = new HashMap<String,Set<String>>();
+	
+public SpectralRank() {
+	//items: A, B, C, D, E, F, G
+	SimpleAttribute attrA = new SimpleAttribute("A", "QualityA");
+	SimpleAttribute attrB = new SimpleAttribute("B", "QualityB");
+	SimpleAttribute attrC = new SimpleAttribute("C", "QualityC");
+	SimpleAttribute attrD = new SimpleAttribute("D", "QualityD");
+	SimpleAttribute attrE = new SimpleAttribute("E", "QualityE");
+	SimpleAttribute attrF = new SimpleAttribute("F", "QualityF");
+	SimpleAttribute attrG = new SimpleAttribute("G", "QualityG");
+	
+	//Comparisons: A>B, A>C, A>D
+	//B>D, C>D, D>E, D>F, D>G, E>G, F>G,
+	//A>D, A>E, A>F, D>F, E>F,
+	//B>C, B>D, B>G, C>D, G>D
+	//In this example, the person chose D greater than G and 
+	//G>D in another question, which is completely possible for the
+	//person to do.
+	/**
+	attrB.addToList(attrA); attrC.addToList(attrA); attrD.addToList(attrA);
+	attrD.addToList(attrB); attrD.addToList(attrC); attrE.addToList(attrD);
+	attrF.addToList(attrD); attrG.addToList(attrD); attrG.addToList(attrE);
+	attrG.addToList(attrF); attrD.addToList(attrA); attrE.addToList(attrA);
+	attrF.addToList(attrA); attrF.addToList(attrD); attrF.addToList(attrE); 
+	attrC.addToList(attrB); attrD.addToList(attrB); attrG.addToList(attrB); 
+	attrD.addToList(attrC); attrD.addToList(attrG);
+	*/
+	
+	//A>G, A>E, G>E
+	//E>C, E>F, C>F
+	//A>F, A>D, F>D
+	//B>E, B>D, E>D
+	//C>D, C>G, D>G
+	//B>F, B>G, F>G
+	//A>B, A>C, B>C
+	attrG.addToList(attrA); attrE.addToList(attrA); attrE.addToList(attrG);
+	attrC.addToList(attrE); attrF.addToList(attrE); attrF.addToList(attrC);
+	attrF.addToList(attrA); attrD.addToList(attrA); attrD.addToList(attrF);
+	attrE.addToList(attrB); attrD.addToList(attrB); attrD.addToList(attrE);
+	attrD.addToList(attrC); attrG.addToList(attrC); attrG.addToList(attrD);
+	attrF.addToList(attrB); attrG.addToList(attrB); attrG.addToList(attrF);
+	attrB.addToList(attrA); attrC.addToList(attrA); attrC.addToList(attrB);
+	
+	attrList = new ArrayList<SimpleAttribute>();
+	attrList.add(attrA);
+	attrList.add(attrB);
+	attrList.add(attrC);
+	attrList.add(attrD);
+	attrList.add(attrE);
+	attrList.add(attrF);
+	attrList.add(attrG);
+	
+}
+
+private void createEpsilonEdges() {
+	Set<SimpleAttribute> wants_in = new TreeSet<SimpleAttribute>();
+	Set<SimpleAttribute> wants_out = new TreeSet<SimpleAttribute>();
+	//Get Attributes that have edges going all in or all out.
+	for(SimpleAttribute attr : attrList) {
+		if(attr.getTally() == attr.getList().size()) {
+			wants_in.add(attr);
+		} else if(attr.getList().size() == 0) {
+			wants_out.add(attr);
+		}
+	}
+	
+	//Check for empty sets
+	if(wants_in.isEmpty() && wants_out.isEmpty()) return;
+	
+	//Get the difference in sizes.
+	int count = wants_in.size() - wants_out.size();
+	
+	//Try to get the two sets to have equal sizes.
+	for(SimpleAttribute attr : attrList) {
+		if (count == 0) break;
+		if (!wants_in.contains(attr) && !wants_out.contains(attr)) {
+			if(count > 0) {
+				wants_out.add(attr);
+			} else {
+				wants_in.add(attr);
+			}
+		}
+	}
+	
+	Iterator<SimpleAttribute> itr_in = wants_in.iterator();
+	Iterator<SimpleAttribute> itr_out = wants_out.iterator();
+	//When wants_in's size is greater or equal to wants_out.
+	if(count >= 0) {
+		while(itr_in.hasNext()) {
+			SimpleAttribute in = itr_in.next();
+			SimpleAttribute out = itr_out.next();
+			//Add the edge from out to in.
+			if(epsilons.containsKey(in.getName())) {
+				epsilons.get(in.getName()).add(out.getName());
+			} else {
+				Set<String> out_temp = new HashSet<String>();
+				out_temp.add(out.getName());
+				epsilons.put(in.getName(), out_temp);
+			}
+			//Add edge from in to out.
+			if(epsilons.containsKey(out.getName())) {
+				epsilons.get(out.getName()).add(in.getName());
+			} else {
+				Set<String> in_temp = new HashSet<String>();
+				in_temp.add(in.getName());
+				epsilons.put(out.getName(), in_temp);
+			}
+			if(!itr_out.hasNext()) {
+				itr_out = wants_out.iterator();
+			}
+		}
+	//When want_out's size is greater than wants_in.
+	} else {
+		while(itr_out.hasNext()) {
+			SimpleAttribute in = itr_in.next();
+			SimpleAttribute out = itr_out.next();
+			//Add the edge from out to in.
+			if(epsilons.containsKey(in.getName())) {
+				epsilons.get(in.getName()).add(out.getName());
+			} else {
+				Set<String> out_temp = new HashSet<String>();
+				out_temp.add(out.getName());
+				epsilons.put(in.getName(), out_temp);
+			}
+			//Add edge from in to out.
+			if(epsilons.containsKey(out.getName())) {
+				epsilons.get(out.getName()).add(in.getName());
+			} else {
+				Set<String> in_temp = new HashSet<String>();
+				in_temp.add(in.getName());
+				epsilons.put(out.getName(), in_temp);
+			}
+			if(!itr_in.hasNext()) {
+				itr_in = wants_in.iterator();
+			}
+		}
+	}
+}
+
+public void doSpectralRank() {
+	double[][] m_probability = new double[attrList.size()][attrList.size()];
+	double[] rankValues = new double[attrList.size()];
+	
+	//Create epsilon edges for attributes that don't have any ins and don't have any outs.
+	createEpsilonEdges();
+	for(int i = 0; i < attrList.size(); i++) {
+		Arrays.fill(m_probability[i], 0.0);
+	}
+	Arrays.fill(rankValues, 1.0/ (double)attrList.size());
+	for(int i = 0; i < attrList.size(); i++) {
+		for(int j = 0; j < attrList.size(); j++) {
+			double aij = attrList.get(i).getCountOf(attrList.get(j));
+			double aji = attrList.get(j).getCountOf(attrList.get(i));
+			double di = attrList.get(i).getTally();
+			/**
+			//force epsilon from A to G until function written
+			if ((i == 0 && j == 7 - 1)) {
+				aij += 0.01;
+			}
+			//you dont need to do case for a_G_A  for p_G_A because that would be 0 since A never beats G.
+			if(i == 0 || i == 7 - 1) {
+				//do i increment di?
+				di++;
+			}
+			*/
+			
+			//force epsilon from A to C until function written
+			if ((i == 0 && j == 2)) {
+				aij += 0.01;
+			}
+			//force epsilon from A to C until function written
+			if (i == 2 && j == 0) {
+				aji += 0.01;
+			}
+			//you dont need to do case for a_G_A  for p_G_A because that would be 0 since A never beats G.
+
+			
+			if (aij == 0) {
+				m_probability[i][j] = 0;
+			} else {
+				m_probability[i][j] = (1.0 / di) * (aij / (aij + aji));
+			}
+		}
+	}
+	
+	/** 
+	for(int j = 0; j < attrList.size(); j++) {
+	
+	for(int i = 0; i < attrList.size(); i++) {
+		System.out.println(m_probability[i][j]);
+	}
+	}
+	**/
+	
+	//Get the rank values for each attribute (weights).
+	double[] updatedValues = new double[attrList.size()];
+	while(!Arrays.equals(rankValues, updatedValues)) {
+		//Multiply by the array of values for each attribute.
+		//(Make a walk).
+		for(int j = 0; j < attrList.size(); j++) {
+			for(int i = 0; i <attrList.size(); i++) {
+				updatedValues[j] += m_probability[i][j] * rankValues[i];
+			}
+		}
+		rankValues = updatedValues;
+	}
+	
+	//Print the rankings
+	for(int i = 0; i < attrList.size(); i++) {
+		System.out.println(attrList.get(i).getName() + ": "  + rankValues[i] * 200.0);
+	}
+}
+
+
+}

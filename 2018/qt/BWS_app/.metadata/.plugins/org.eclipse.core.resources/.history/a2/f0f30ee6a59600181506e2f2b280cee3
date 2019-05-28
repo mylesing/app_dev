@@ -1,0 +1,26 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class SimpleRankTest {
+
+	@Test
+	void SimpleRankTest() {
+		SimpleAttribute attrA = new SimpleAttribute("A", "QualityA");
+		SimpleAttribute attrB = new SimpleAttribute("B", "QualityB");
+		SimpleAttribute attrC = new SimpleAttribute("C", "QualityC");
+		SimpleAttribute attrD = new SimpleAttribute("D", "QualityD");
+		SimpleAttribute attrE = new SimpleAttribute("E", "QualityE");
+		SimpleAttribute attrF = new SimpleAttribute("F", "QualityF");
+		SimpleAttribute attrG = new SimpleAttribute("G", "QualityG");
+		List<SimpleAttribute> attrList = new LinkedList<SimpleAttribute>();
+		attrList.add(attrA);
+		attrList.add(attrB);
+		attrList.add(attrC);
+		attrList.add(attrD);
+		attrList.add(attrE);
+		attrList.add(attrF);
+		attrList.add(attrG);	
+	}
+
+}

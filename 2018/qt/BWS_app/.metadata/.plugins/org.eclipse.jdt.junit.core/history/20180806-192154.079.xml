@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="SimpleMatrixRankTest" project="BWS" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testsuite name="SimpleMatrixRankTest" time="65.124" uniqueid="[engine:junit-jupiter]/[class:SimpleMatrixRankTest]">
+    <testcase name="test" classname="SimpleMatrixRankTest" time="65.124" displayname="test()" uniqueid="[engine:junit-jupiter]/[class:SimpleMatrixRankTest]/[method:test()]"/>
+  </testsuite>
+</testrun>

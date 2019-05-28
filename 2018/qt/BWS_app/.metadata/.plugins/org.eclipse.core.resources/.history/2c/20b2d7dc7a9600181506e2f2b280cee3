@@ -1,0 +1,13 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class SpectralRankTest {
+
+	@Test
+	void SpectralRankDotest() {
+		SpectralRank spectral = new SpectralRank();
+		spectral.doSpectralRank();
+	}
+
+}

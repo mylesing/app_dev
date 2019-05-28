@@ -1,0 +1,18 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class RankTest {
+
+	@Test
+	void testRun() {
+		Rank bws = new Rank();
+		bws.setup();
+		bws.run();
+		bws.run();
+		bws.run();
+		bws.run();
+		bws.run();
+	}
+
+}

@@ -1,0 +1,32 @@
+/** This class implements the spectral ranking method.
+ * It uses a Markov chain with of the items and edges for
+ * their comparisons. The rankings are calculated by randomly
+ * walking through the chain until the rankings do not change.
+ *
+ */
+public class SpectralRank {
+	
+public SpectralRank() {
+	//items: A, B, C, D, E, F, G
+	//Comparisons: A>B, A>C, A>D
+	//B>D, C>D, D>E, D>F, D>G, E>G, F>G,
+	//A>D, A>E, A>F, D>F, E>F,
+	//B>C, B>D, B>G, C>D, G>D
+	//In this example, the person chose D greater than G and 
+	//G>D in another question, which is completely possible for the
+	//person to do.
+	SimpleAttribute attrA = new SimpleAttribute("A", "QualityA");
+	SimpleAttribute attrB = new SimpleAttribute("B", "QualityB");
+	SimpleAttribute attrC = new SimpleAttribute("C", "QualityC");
+	SimpleAttribute attrD = new SimpleAttribute("D", "QualityD");
+	SimpleAttribute attrE = new SimpleAttribute("E", "QualityE");
+	SimpleAttribute attrF = new SimpleAttribute("F", "QualityF");
+	SimpleAttribute attrG = new SimpleAttribute("G", "QualityG");
+	
+	
+	
+}
+
+
+
+}

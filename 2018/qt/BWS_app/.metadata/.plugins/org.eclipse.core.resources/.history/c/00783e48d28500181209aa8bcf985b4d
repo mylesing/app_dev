@@ -1,0 +1,48 @@
+import java.util.LinkedList;
+import java.util.List;
+
+/** 
+ * This the object class for the attribute options that will be
+ * ranked with the BWS method. It stores the attribute's name, 
+ * description, list of attributes currently ranked higher, and
+ * a tally of how many attributes it is ranked higher than.
+ */
+
+
+public class Attribute {
+	
+	/** The name and description for this Attribute.
+	 *  name: Attributes can have a long description. This gives it a
+	 *  	  shorter name.
+	 *  description: A description is how the Attribute appears in the 
+	 *  			 question (i.e. "Runny nose").
+	 */
+	private String name;
+	private String description;
+	
+	/** The list and tally for this Attribute.
+	 *  list: A list containing the names of Attributes ranked higher.
+	 *  tally: The count of how many Attributes this Attribute is
+	 *  	   ranked higher than.
+	 */
+	private List<String> list;
+	private int tally;
+	
+	/**
+	 * Constructor
+	 */
+	public Attribute(String name, String description) {
+		this.name = name;
+		this.description = description;
+		this.list = new LinkedList<String>();
+		this.tally = 0;
+	}
+	
+	public Attribute(String name, String description, List<String> list, int tally) {
+		this.name = name;
+		this.description = description;
+		this.list = list;
+		this.tally = tally;
+	}
+
+}

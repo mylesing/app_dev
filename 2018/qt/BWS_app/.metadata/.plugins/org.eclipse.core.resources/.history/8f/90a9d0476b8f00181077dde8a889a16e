@@ -1,0 +1,60 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+/** This class implements the spectral ranking method.
+ * It uses a Markov chain with of the items and edges for
+ * their comparisons. The rankings are calculated by randomly
+ * walking through the chain until the rankings do not change.
+ *
+ */
+public class SpectralRank {
+	List<SimpleAttribute> attrList;
+	
+public SpectralRank() {
+	//items: A, B, C, D, E, F, G
+	//Comparisons: A>B, A>C, A>D
+	//B>D, C>D, D>E, D>F, D>G, E>G, F>G,
+	//A>D, A>E, A>F, D>F, E>F,
+	//B>C, B>D, B>G, C>D, G>D
+	//In this example, the person chose D greater than G and 
+	//G>D in another question, which is completely possible for the
+	//person to do.
+	SimpleAttribute attrA = new SimpleAttribute("A", "QualityA");
+	SimpleAttribute attrB = new SimpleAttribute("B", "QualityB");
+	SimpleAttribute attrC = new SimpleAttribute("C", "QualityC");
+	SimpleAttribute attrD = new SimpleAttribute("D", "QualityD");
+	SimpleAttribute attrE = new SimpleAttribute("E", "QualityE");
+	SimpleAttribute attrF = new SimpleAttribute("F", "QualityF");
+	SimpleAttribute attrG = new SimpleAttribute("G", "QualityG");
+	
+	attrB.addToList(attrA); attrC.addToList(attrA); attrD.addToList(attrA);
+	attrD.addToList(attrB); attrD.addToList(attrC); attrE.addToList(attrD);
+	attrF.addToList(attrD); attrG.addToList(attrD); attrG.addToList(attrE);
+	attrG.addToList(attrF); attrD.addToList(attrA); attrE.addToList(attrA);
+	attrF.addToList(attrA); attrF.addToList(attrD); attrF.addToList(attrE); 
+	attrC.addToList(attrB); attrD.addToList(attrB); attrG.addToList(attrB); 
+	attrD.addToList(attrC); attrD.addToList(attrG);
+	attrList = new ArrayList<SimpleAttribute>();
+	attrList.add(attrA);
+	attrList.add(attrB);
+	attrList.add(attrC);
+	attrList.add(attrD);
+	attrList.add(attrE);
+	attrList.add(attrF);
+	attrList.add(attrG);
+	
+}
+
+public void doSpectralRank() {
+	double[][] m_probability = new double[attrList.size()][attrList.size()];
+	for (int i = 0; i < attrList.size(); i++) {
+		for (int j = 0; j < attrList.size(); j++) {
+			//make function in simple attr to get how many times attrlist[j] appears in atterlist[i]
+			m_probability[i][j] = attrList
+		}
+	}
+}
+
+
+}

@@ -1,0 +1,25 @@
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+/**
+ *Testing TOPSIS class
+ */
+class TOPSISTest {
+
+	@Test
+	protected void testTOPSISIrregularColumns() {
+		
+	}
+	
+	@Test
+	protected void testTOPSISMismatchWeightsAndMatrix() {
+		
+	}
+	
+	@Test
+	protected void testTOPSIS() {
+		
+	}
+	
+
+}

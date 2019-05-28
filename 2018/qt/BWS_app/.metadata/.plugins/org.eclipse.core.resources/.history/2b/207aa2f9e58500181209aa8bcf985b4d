@@ -1,0 +1,31 @@
+import java.util.HashMap;
+import java.util.Map;
+int i;
+/**
+ * The BWS Ranking process. It takes four Attributes taking
+ * into account their priorities to be asked and asks the
+ * question. It then ranks and assigns new priorities to
+ * the Attributes.
+ */
+public class Rank {
+	//HashMap containing the complete list of Attributes to be ranked.
+	private Map<String, Attribute> attrAll = new HashMap<>();
+	
+	//Creating the Attributes.
+	//Update this process with sets of Attributes that can be accessed
+	//and a UI that can create a set of Attributes.
+	Attribute attrA = new Attribute("A", "QualityA");
+	Attribute attrB = new Attribute("B", "QualityB");
+	Attribute attrC = new Attribute("C", "QualityC");
+	Attribute attrD = new Attribute("D", "QualityD");
+	Attribute attrE = new Attribute("E", "QualityE");
+	Attribute attrF = new Attribute("F", "QualityF");
+	Attribute attrG = new Attribute("G", "QualityG");
+	
+	//Adding the Attributes to the map.
+	attrAll.put("A", attrA);
+	
+	public void run() {
+		
+	}
+}

@@ -1,0 +1,22 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
+class RankTest {
+
+	@Test
+	void testRun() {
+		List<String> rank = new LinkedList<String>();
+		
+		Rank bws = new Rank();
+		bws.setup();
+		bws.run();
+		bws.run();
+		bws.run();
+		bws.run();
+	}
+
+}

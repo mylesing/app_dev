@@ -1,0 +1,74 @@
+import java.util.HashMap;
+import java.util.Map;
+/**
+ * The BWS Ranking process. It takes four Attributes taking
+ * into account their priorities to be asked and asks the
+ * question. It then ranks and assigns new priorities to
+ * the Attributes.
+ */
+public class Rank {
+	/**
+	 * HashMap containing the complete list of Attributes to be ranked.
+	 * Corresponding Map of priorities. Priority is determined by the total 
+	 * number of comparisons an Attribute has with other Attributes. 
+	 * Smaller numbers have greater priority.
+	 */
+	private Map<String, Attribute> attrAll = new HashMap<>();
+	private Map<String, Integer> priorities = new HashMap<>();
+	
+	//Creating the Attributes.
+	//Update this process with sets of Attributes that can be accessed
+	//and a UI that can create a set of Attributes.
+	Attribute attrA = new Attribute("A", "QualityA");
+	Attribute attrB = new Attribute("B", "QualityB");
+	Attribute attrC = new Attribute("C", "QualityC");
+	Attribute attrD = new Attribute("D", "QualityD");
+	Attribute attrE = new Attribute("E", "QualityE");
+	Attribute attrF = new Attribute("F", "QualityF");
+	Attribute attrG = new Attribute("G", "QualityG");
+	
+	public void setup() {
+		//Adding the Attributes to the Attributes map.
+		attrAll.put("A", attrA);
+		attrAll.put("B", attrB);
+		attrAll.put("C", attrC);
+		attrAll.put("D", attrD);
+		attrAll.put("E", attrE);
+		attrAll.put("F", attrF);
+		attrAll.put("G", attrG);
+		//Adding priorities to priorities HashMap
+		priorities.put("A", 0);
+		priorities.put("B", 0);
+		priorities.put("C", 0);
+		priorities.put("D", 0);
+		priorities.put("E", 0);
+		priorities.put("F", 0);
+		priorities.put("G", 0);		
+	}
+	
+	/**
+	 * Choose four attributes based on priority.
+	 * Best and worst will be picked here until UI is made.
+	 * Update lists and tallies.
+	 * Repeat until complete ranking is achieved (if they all have
+	 * comparisons to each other).
+	 */
+	public void run() {
+		//If they all have comparisons to each other, ranking is complete.
+		for (Attribute attr : attrAll.values()) {
+			if (attr.getTotal() >= attrAll.size() - 1) continue;
+			break;
+		}
+		
+		//Choose the four highest priority Attributes to ask a question
+		String[] options = new String[4];
+		options = chooseFour(options);
+		
+	}
+	
+	private String[] chooseFour(String[] options) {
+		
+		return options;
+	}
+	
+}

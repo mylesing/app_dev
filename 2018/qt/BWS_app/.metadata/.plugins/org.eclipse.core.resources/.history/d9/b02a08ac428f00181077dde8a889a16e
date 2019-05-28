@@ -1,0 +1,47 @@
+/**
+ * This is the class for running TOPSIS.
+ * It sorts items based on their attributes and a set weights.
+ * It stores an unchangeable decision matrix that contains
+ * the items and their values for each attribute. It takes in
+ * a set of weights (a person's preferences that we get from BWS)
+ * and orders the items with those weights applied. The class
+ * allows for setting the weights, and getting the ideal and
+ * negative-ideal orderings of the items. The ideal ordering is
+ * the ordering where the items will be in order of demonstrating 
+ * the highest amounts of the most preferred attributes. The 
+ * negative-ideal solution means the items will be in order of
+ * demonstrating the least amounts of the most preferred
+ * attributes.
+ */
+public class TOPSIS {
+	
+	double[][]  m_decision;
+	int items_length;
+	int attr_length;
+	double[] weights;
+	
+	public TOPSIS(double[][]  d, double[] w) {
+		//Check that the decision matrix has the same number of columns for
+		//each row.
+		for(int i = 0; i < d.length; i++) {
+			if(d[i].length != d[0].length) 
+				throw new IllegalArgumentException("Matrix given is does not "
+						+ "have equal number of columns for each row.");
+		}
+		//Check that the number of weights matches the number of columns.
+		if(weights.length != d[0].length)
+			throw new IllegalArgumentException("Length of weights array does "
+					+ "not match number of columns in decision matrix.");
+		this.m_decision = d;
+		this.weights = w;
+		//Calculate how many attributes and how many items are in m_decision.
+		//Matrices are row major.
+		attr_length = m_decision.length;
+		items_length = m_decision[0].length;
+	}
+	
+	
+	
+	//When setWeight is called, all information in variables except the decision matrix is cleared.
+
+}

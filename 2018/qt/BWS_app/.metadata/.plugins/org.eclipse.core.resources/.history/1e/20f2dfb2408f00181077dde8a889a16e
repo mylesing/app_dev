@@ -1,0 +1,11 @@
+
+public class TOPSIS {
+	
+	double[][]  m_decision;
+	double[] weights;
+	
+	public TOPSIS(double[][]  d, double[] w) {
+		
+	}
+
+}

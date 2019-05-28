@@ -1,0 +1,30 @@
+import java.util.Random;
+
+public class Game {
+	public int getGoal() {
+		Random rand = new Random();
+		return rand.nextInt(700) + 299;
+	}
+	
+	public int[] getNumbers(int bigs) {
+		int numbers[] = new int[7];
+		for(int i = 0; i < bigs; i++) {
+			double x = Math.random();
+			if (x > .75) {
+				numbers[i] = 75;
+			} else if ( x > .5) {
+				numbers[i] = 50;
+			} else {
+				numbers[i] = 25;
+			}
+			
+		}
+		
+		Random rand = new Random();
+		for(int i = bigs; i < 7; i++) {
+			int small = rand.nextInt(9) + 1;
+			numbers[i] = small;
+		}
+		return numbers;
+	}
+}
