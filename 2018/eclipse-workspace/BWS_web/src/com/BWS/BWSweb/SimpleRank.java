@@ -24,8 +24,14 @@ public class SimpleRank {
 	 * number of comparisons an SimpleAttribute has with other SimpleAttributes.
 	 * Smaller numbers have greater priority.
 	 */
+	// complete list of simple attributes to be ranked 
 	private Map<String, SimpleAttribute> attrAll;
+	
+	// corresponding list of priorities 
+	// priority determined by the total number of comparisons an attribute has w other attributes
+	// less comparisons = greater priority
 	private Set<SimpleAttribute> priorities;
+	
 	private Set<SimpleAttribute> lastQuestion;
 	private Set<String> removed;
 	private Set<String> middle;
@@ -48,6 +54,7 @@ public class SimpleRank {
 		this.priorities = new TreeSet<SimpleAttribute>();
 		this.lastQuestion = new TreeSet<SimpleAttribute>();
 		this.ran = false;
+		
 		//Attributes are chosen as best, worst, or the two not chosen as best or
 		//worst. 
 		//We work with groups of Attributes at a time--> Question further the 
@@ -146,6 +153,7 @@ public class SimpleRank {
 		//If they all have comparisons to each other, all rankings are complete
 		//and BWS process is done.
 		Scanner user = new Scanner(System.in);
+		
 		for (Set<String> question : toAsk) {
 			//Choose the four highest priority SimpleAttributes to ask a question
 			//If there are no options to give, the questions are done.
@@ -224,121 +232,6 @@ public class SimpleRank {
 		return 0;
 	}
 	
-	/** Commented out until for now until it needs to be used.
-	public int run(List<String> rank) {
-		//If an SimpleAttribute has comparisons with all the other SimpleAttributes,
-		//it is ranked and done.
-		//If they all have comparisons to each other, all rankings are complete
-		//and BWS process is done.
-		Iterator<SimpleAttribute> iterator = attrAll.values().iterator();
-		while(iterator.hasNext()) {
-			SimpleAttribute attr = iterator.next();
-			//Return 1 for completing ranking.
-			//If there is only one attribute that doesn't have all comparisons,
-			//the chooseFour function will throw the error. Though, it isn't
-			//likely.
-			if (attr.getTotal() >= attrAll.size() - 1 && !iterator.hasNext()) 
-				return 1;
-			if (attr.getTotal() >= attrAll.size() - 1 && iterator.hasNext()) 
-				continue;
-			break;
-		}
-					
-		//Choose the four highest priority SimpleAttributes to ask a question
-		String[] options = new String[4];
-		options = chooseFour(options);
-		
-		//Ask question and receive input. Then update lists.
-		String[] rankedOptions = new String[4];
-		Arrays.fill(rankedOptions, "");
-		int count = 0;
-		for (String ranked : rank) {
-			if (ranked.equals(options[0])) {
-				rankedOptions[count] = options[0];
-				count++;
-			} else if (ranked.equals(options[1])) {
-				rankedOptions[count] = options[1];
-				count++;
-			} else if (ranked.equals(options[2])) {
-				rankedOptions[count] = options[2];
-				count++;
-			} else if (ranked.equals(options[3])) {
-				rankedOptions[count] = options[3];
-				count++;
-			}
-			if(count >= 4) break;
-		}
-		String most = rankedOptions[0];
-		System.out.println("most: " +  most);
-		if(rankedOptions[2].equals("")) {
-			String least = rankedOptions[1];
-			updateLists(most, least, rankedOptions[2], rankedOptions[3]);
-		} else if(rankedOptions[3].equals("")) {
-			String least = rankedOptions[2];
-			updateLists(most, least, rankedOptions[1], rankedOptions[3]);
-		} else {
-			String least = rankedOptions[3];
-			updateLists(most, least, rankedOptions[1], rankedOptions[2]);
-		}
-		
-		//Print in order of largest tally
-		Collection<SimpleAttribute> attrs = attrAll.values();
-		Iterator<SimpleAttribute> iter = attrs.iterator();
-		while(iter.hasNext()) {
-			SimpleAttribute attribute = iter.next();
-			System.out.println(attribute.getName() + ": " + attribute.getList().size());
-		}
-		
-		//Return 0 for having run successfully
-		return 0;
-	}
-	
-	
-		//Fill with  options that have more than 3 appearances if max options
-		//have not been chosen.
-		iter = priorities.iterator();
-		while (iter.hasNext() && (optionsCount < max)) {
-			SimpleAttribute current = iter.next();
-			if(current.getName().equals(options[0]) 
-					|| current.getName().equals(options[1]) 
-					|| current.getName().equals(options[2])) {
-				continue;
-			}
-			options[optionsCount] = current.getName();
-			optionsCount++;
-		}
-		
-		
-		
-	 * Make a matrix where the rows and columns are the Attributes. 
-	 * The matrix has every possible relationship between two Attributes.
-	 * Mark true for relationship that have already been considered.
-	 * A relationship between an Attribute and itself is true because
-	 * we already know the relationship for that.
-	 * allPairs[i][j] is the same as allPairs[j][i] so mark true for
-	 * one of them randomly to help randomize the matrix.
-	 * 
-	public void makeRelationshipMatrix() {
-		allPairs = new boolean[priorities.size()][priorities.size()];
-		Random rand = new Random();
-		for (boolean[] row: allPairs)
-			Arrays.fill(row, false);
-		for (int i = 0; i < allPairs[0].length; i++) {
-			for (int j = 0; j < allPairs[0].length; j++) {
-				if (i == j) allPairs[i][j] = true;
-				if (allPairs[j][i] || allPairs[i][j]) continue;
-				allPairs[i][j] = rand.nextBoolean();
-				allPairs[j][i] = !allPairs[i][j];
-			}
-		}
-		for (boolean[] row: allPairs)
-			System.out.println(Arrays.toString(row));
-	}
-	
-	*/
-	
-	
-	
 	/**
 	 * Current Priority method
 	 * Choose one with lowest number of comparisons with other SimpleAttributes.
@@ -353,6 +246,49 @@ public class SimpleRank {
 	 * If there is only one option then send error.
 	 */
 	private void makeQuestions(int num) {
+		// map rankings<Integer, Set> : attributes are mapped to priority values in sets
+		// while (rankings.size < numAttributes)
+		// 1. find the first set of attributes in the map of size > 1
+		// 2. if set has 4+ attributes, pick first 4 and add them to the set of questions
+		// 		otherwise, make a question out of all of the sets
+		// 3. as user to identify best and worst attributes
+		// 		if best, +1 the priority and add it to the relevant set in map
+		//		if worst, -1 the priority and add it the the relevant set in map
+		// 4. add attributes that rank lower than best to best's attrList
+		//		also add worst to the middle attr's lists
+		// 5. update map and ask next question
+		
+//		Map<Integer, Set<SimpleAttribute>> rankings = new HashMap<Integer, Set<SimpleAttribute>>();
+//		Set<SimpleAttribute> attr_set = priorities;
+//		rankings.put(0, attr_set);
+//		
+//		while (rankings.size() < priorities.size()) {
+//			 Iterator it = rankings.entrySet().iterator();
+//			 while (it.hasNext()) {
+//				 Map.Entry pair = (Map.Entry)it.next();
+//				 Set<SimpleAttribute> curr_set = (Set<SimpleAttribute>)pair.getValue();
+//				 if (curr_set.size() > 1) {
+//					 Set<SimpleAttribute> question = new TreeSet<SimpleAttribute>();
+//					 if (curr_set.size() <= 4) {
+//						 question.addAll(curr_set);
+//					 } else {
+//						 int ct = 0;
+//						 Iterator set_it = curr_set.iterator();
+//						    while (set_it.hasNext() && ct < 4) {
+//						        question.add((SimpleAttribute) set_it.next());
+//						        ct++;
+//						    }
+//						 
+//					 }
+//				 } 
+//			     
+//			 }
+//		}
+//		
+		
+		// let there be 
+		
+		
 		//Find max number of options per question
 		int max;
 		if (num == 0) {
@@ -373,12 +309,18 @@ public class SimpleRank {
 		boolean first = true;
 		LinkedList<Set<String>> tempStore = new LinkedList<Set<String>>();
 		while (true) {
+			// iterate through priorities
 			SimpleAttribute start = priorities.iterator().next();
+			// tempStore starts off empty
+			// we go through each set in tempStore and add it to the sort set
+			// the set is sorted in reverse order (since less comparisons = less priority)
 			for (Set<String> q : tempStore) {
 				TreeSet<SimpleAttribute> sort = new TreeSet<SimpleAttribute>(Collections.reverseOrder());
+				// 
 				for (String attr : q) {
 					sort.add(attrAll.get(attr));
 				}
+				
 				for (SimpleAttribute attr : sort) {
 					if (attr.getAppearance() < maxAppearance) {
 						start = attr;
@@ -386,13 +328,17 @@ public class SimpleRank {
 					}
 				}
 			}
+			// for testing
 			System.out.println(start.getName());
+			
 			//Make a question
 			if ((start.getAppearance() > 0 || first)) {
+				// for testing purposes
 				System.out.println(start.getName());
 				for (SimpleAttribute attr : priorities) {
 					System.out.println(attr.getName() + ": "  + attr.getAppearance());
 				}
+				
 				first = false;
 				//Add the first option to the question
 				int count = 1;
@@ -433,7 +379,8 @@ public class SimpleRank {
 					}
 				}
 				//toAsk.add(question);
-			}			
+			}
+			
 			if(toAsk.size() >= (attrAll.size()*maxAppearance/max) - 3) {
 				return;
 			}

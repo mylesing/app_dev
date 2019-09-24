@@ -387,6 +387,16 @@ public class SimpleRank {
 			}
 			System.out.println(start.getName());
 			//Make a question
+			
+			// if the appearance of the "start" attribute is greater than 0 or if we're on the first attribute
+			// add first option to question
+			// go through the list of attributes in priorities 
+			// if the attribute does not share a name and / or has less appearance than maxAppearance OR is already in the list of questions that need to be asked
+			// 				-> it is not a viable option
+			// otherwise, it is a viable option 
+			// if the attribute is a viable option, add it to te question and increment count
+			// if we've maxed out the number of attributes we can ask about in this question, 
+			// we add it to the list of questions we have to ask from in the future
 			if ((start.getAppearance() > 0 || first)) {
 				System.out.println(start.getName());
 				for (SimpleAttribute attr : priorities) {

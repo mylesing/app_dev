@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
@@ -8,8 +9,9 @@ import java.util.TreeMap;
  * It stores an unchangeable decision matrix that contains
  * the items and their values for each attribute. It takes in
  * a set of weights (a person's preferences that we get from BWS)
- * and orders the items with those weights applied. The class
- * allows for setting the weights and getting the rankings of
+ * and orders the items with those weights applied. 
+ * 
+ * The class allows for setting the weights and getting the rankings of
  * the items. The ranking returns the items in order of 
  * demonstrating the highest amounts of the most preferred 
  * attributes. 
@@ -67,6 +69,17 @@ public class TOPSIS {
 	}
 	
 	private void doTOPSIS() {
+		
+		// print out decision matrix
+		System.out.println("Decision Matrix: ");
+		for (double[] row : m_decision) {
+		    System.out.println(Arrays.toString(row));
+		}
+				
+		
+		// 1. construct normalized decision matrix
+		// 2. find sqrt(sum of column)
+		// 3. 
 		//Construct the normalized decision matrix.
 		double[][]  m_normalized = new double[items_length][attr_length];
 		for(int j = 0; j < attr_length; j++) {
@@ -87,6 +100,12 @@ public class TOPSIS {
 			}
 		}
 		
+		// print out normalized matrix
+		System.out.println("Normalized Matrix: ");
+		for (double[] row : m_normalized) {
+		    System.out.println(Arrays.toString(row));
+		}
+		
 		//Construct the weighted normalized matrix
 		double[][] m_weighted = new double[items_length][attr_length];
 		for(int i = 0; i < items_length; i++) {
@@ -94,6 +113,12 @@ public class TOPSIS {
 				m_weighted[i][j] = m_normalized[i][j] * weights[j];
 			}
 		}
+		
+		// print out weighted normalized matrix
+		System.out.println("Weighted Normalized Matrix: ");
+        for (double[] row : m_weighted) {
+            System.out.println(Arrays.toString(row));
+        }
 				
 		//Determine the ideal solution which is the largest value in each column
 		//(different from the final ideal ordering of items).
@@ -111,6 +136,9 @@ public class TOPSIS {
 			ideal_solution[j] = max;
 			neg_solution[j] = min;
 		}
+		
+		System.out.println("Positive Ideal Solution: " + Arrays.toString(ideal_solution));
+		System.out.println("Negative Ideal Solution: " + Arrays.toString(neg_solution));
 
 		//Calculate the separation measures
 		double[] pos_separation = new double[items_length];
@@ -128,6 +156,9 @@ public class TOPSIS {
 			pos_separation[i] = Math.sqrt(rootSepSum);
 			neg_separation[i] = Math.sqrt(rootNegSepSum);
 		}
+		
+		System.out.println("Positive Ideal Solution: " + Arrays.toString(pos_separation));
+		System.out.println("Negative Ideal Solution: " + Arrays.toString(neg_separation));
 		
 		//Calculate relative closeness to the ideal solution
 		//(Close to ideal solution, far from negative-ideal solution).
